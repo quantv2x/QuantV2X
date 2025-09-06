@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="QuantV2X: A Fully Quantized Multi-Agent System for Cooperative Perception" />
+    <meta name="keywords" content="QuantV2X, V2X, Cooperative Perception, Quantization" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QuantV2X: A Fully Quantized Multi-Agent System for Cooperative Perception</title>
+
+    <!-- Fonts & libs -->
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" />
+
+    <!-- Your stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- ===== Hero ===== -->
+    <section id="hero" class="hero">
+        <div class="hero-body">
+            <div class="container is-max-desktop">
+                <div class="columns is-centered">
+                    <div class="column has-text-centered">
+
+                        <!-- Title -->
+                        <h1 class="title is-2 publication-title" style="margin-bottom:1.5rem;">
+                            QuantV2X: A Fully Quantized Multi-Agent System for Cooperative Perception
+                        </h1>
+
+                        <!-- Quick metrics -->
+                        <div class="has-text-centered" style="margin-bottom:2rem;">
+                            <div class="metric-highlight">
+                                <span class="metric-value">3.2×</span>
+                                <div class="metric-label">System Speedup</div>
+                            </div>
+                            <div class="metric-highlight">
+                                <span class="metric-value">+9.5</span>
+                                <div class="metric-label">mAP<sub>0.3</sub> vs FP</div>
+                            </div>
+                            <div class="metric-highlight">
+                                <span class="metric-value">99.8%</span>
+                                <div class="metric-label">Accuracy Preserved</div>
+                            </div>
+                        </div>
+
+                        <!-- Teaser image -->
+                        <div class="has-text-centered" style="margin-bottom:1.5rem;">
+                            <img src="static/teaser-1.png" alt="QuantV2X Teaser"
+                                style="max-width:100%; height:auto; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+                        </div>
+
+                        <!-- Subtitle -->
+                        <h2 class="subtitle has-text-centered"
+                            style="max-width:800px; margin:0 auto; font-size:1.25rem;">
+                            <span class="quantv2x">QuantV2X</span> enables efficient cooperative perception via
+                            full-stack quantization, achieving faster end-to-end performance while maintaining accuracy.
+                        </h2>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+
+    <!-- ===== Abstract ===== -->
+    <section id="abstract" class="section">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+                <div class="column is-four-fifths">
+                    <h2 class="title is-3">Abstract</h2>
+                    <div class="content has-text-justified">
+                        <p>
+                            Cooperative perception through Vehicle-to-Everything (V2X) communication offers
+                            significant potential for enhancing vehicle perception by mitigating occlusions and
+                            expanding the field of view. However, past research has predominantly focused on
+                            improving accuracy metrics without addressing the crucial system-level considerations
+                            of efficiency, latency, and real-world deployability. Noticeably, most existing systems
+                            rely on full-precision models, which incur high computational and transmission costs,
+                            making them impractical for real-time operation in resource-constrained environments.
+                        </p>
+                        <p>
+                            In this paper, we introduce <strong>QuantV2X</strong>, the first fully quantized multi-agent
+                            system designed specifically for efficient and scalable deployment of multi-modal,
+                            multi-agent V2X cooperative perception. QuantV2X introduces a unified end-to-end
+                            quantization strategy across both neural network models and transmitted message
+                            representations that simultaneously reduces computational load and transmission bandwidth.
+                        </p>
+                        <p>
+                            Remarkably, despite operating under low-bit constraints, QuantV2X achieves accuracy
+                            comparable to full-precision systems. More importantly, when evaluated under
+                            deployment-oriented metrics, QuantV2X reduces system-level latency by <strong>3.2×</strong>
+                            and achieves a <strong>+9.5 improvement in mAP<sub>30</sub></strong> over full-precision
+                            baselines.
+                            Furthermore, QuantV2X scales more effectively, enabling larger and more capable models
+                            to fit within strict memory budgets.
+                        </p>
+                        <p>
+                            These results highlight the viability of a fully quantized multi-agent intermediate fusion
+                            system for real-world deployment. The system will be publicly released to promote research
+                            in this field.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="section-divider"></div>
+
+    <!-- ===== Method ===== -->
+    <section id="method" class="section">
+        <div class="container is-max-desktop">
+            <h2 class="title is-3 has-text-centered">Method</h2>
+
+            <!-- Pipeline overview figure -->
+            <div class="has-text-centered" style="margin:2rem 0;">
+                <img src="./static/quantv2x_pipeline.png" alt="QuantV2X Three-Stage Pipeline"
+                    style="max-width:100%; height:auto; border-radius:8px;">
+                <p class="is-size-6 has-text-grey">Figure: QuantV2X three-stage pipeline (Pretraining → Codebook
+                    Learning → Post-Training Quantization).</p>
+            </div>
+
+            <!-- Overview -->
+            <div class="content has-text-justified">
+                <p>
+                    QuantV2X follows a three-stage approach to achieve efficient and robust cooperative perception under
+                    realistic constraints.
+                    First, a backbone is pretrained with full-precision features. Next, a codebook is learned to
+                    compress BEV features into compact
+                    indices. Finally, post-training quantization is applied across the pipeline to reduce compute and
+                    memory overhead.
+                </p>
+            </div>
+
+            <!-- Codebook communication -->
+            <h3 class="title is-4">Quantized Codebook Communication</h3>
+            <div class="content has-text-justified">
+                <p>
+                    Instead of transmitting full-precision BEV features, QuantV2X transmits compact codebook indices.
+                    This reduces communication
+                    bandwidth while preserving semantic information. At the receiver, indices are decoded back into
+                    approximate features for fusion,
+                    enabling bandwidth savings without sacrificing perception quality.
+                </p>
+            </div>
+
+            <!-- Alignment module with figure -->
+            <h3 class="title is-4">Alignment Module</h3>
+            <div class="columns is-vcentered" style="margin-top:1rem; margin-bottom:2rem;">
+                <div class="column">
+                    <div class="content has-text-justified">
+                        <p>
+                            Real-world deployment introduces heterogeneity (different sensors/backbones) and spatial
+                            misalignment (pose noise, latency).
+                            QuantV2X includes an Alignment Module that corrects geometric inconsistencies before fusion,
+                            improving robustness to pose errors,
+                            reducing false positives, and maintaining cross-agent consistency.
+                        </p>
+                    </div>
+                </div>
+                <div class="column has-text-centered">
+                    <img src="./static/pose_error.png" alt="Pose Error and Alignment Illustration"
+                        style="max-width:100%; height:auto; border-radius:8px;">
+                    <p class="is-size-6 has-text-grey">Figure: Alignment module mitigating pose error effects.</p>
+                </div>
+            </div>
+
+            <!-- Unified quantization -->
+            <h3 class="title is-4">Unified End-to-End Quantization</h3>
+            <div class="content has-text-justified">
+                <p>
+                    Unlike approaches that quantize only model weights, QuantV2X unifies quantization across both neural
+                    components and the
+                    communication channel. This yields consistent acceleration and memory savings end to end, enabling
+                    real-time deployment
+                    on resource-constrained platforms without sacrificing accuracy.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <div class="section-divider"></div>
+
+    <!-- ===== Results (Model + System) ===== -->
+    <section id="results" class="section">
+        <div class="container is-max-desktop">
+            <h2 class="title is-3 has-text-centered">Results</h2>
+
+            <!-- Model-Level -->
+            <h3 class="title is-4">Model-Level (PTQ)</h3>
+            <div class="content has-text-justified">
+                <p>
+                    QuantV2X preserves accuracy under low-precision while keeping calibration cost low.
+                    The table summarizes AP metrics against prior PTQ methods on DAIR-V2X.
+                </p>
+            </div>
+
+            <!-- Model-level table (from Table 3) -->
+            <div class="comparison-table" style="margin:1rem 0 2rem;">
+                <table class="table is-fullwidth is-striped">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Bits (W/A)</th>
+                            <th>AP<sub>30</sub> ↑</th>
+                            <th>AP<sub>50</sub> ↑</th>
+                            <th>Calibration Cost (GPU·hr)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Full Precision</td>
+                            <td>32/32</td>
+                            <td>75.1</td>
+                            <td>68.2</td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>PD-Quant</td>
+                            <td>4/8</td>
+                            <td>65.5</td>
+                            <td>56.1</td>
+                            <td>0.37</td>
+                        </tr>
+                        <tr>
+                            <td>LiDAR-PTQ</td>
+                            <td>4/8</td>
+                            <td>73.8</td>
+                            <td>65.7</td>
+                            <td>0.93</td>
+                        </tr>
+                        <tr>
+                            <td><strong>QuantV2X (Ours)</strong></td>
+                            <td><strong>4/8</strong></td>
+                            <td><strong>74.2</strong></td>
+                            <td><strong>66.7</strong></td>
+                            <td><strong>0.38</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Qualitative results (convert PDFs to PNGs for web) -->
+            <div class="columns is-multiline" style="margin-bottom:2rem;">
+                <div class="column is-half has-text-centered">
+                    <img src="./static/qual_vis_pp_sec.png" alt="Qualitative Results (SEC)"
+                        style="max-width:100%; height:auto; border-radius:8px;">
+                    <p class="is-size-6 has-text-grey">Qualitative results (LP + CR) — ground-truth in green,
+                        predictions in red.</p>
+                </div>
+                <div class="column is-half has-text-centered">
+                    <img src="./static/qual_vis_pp_lss.png" alt="Qualitative Results (LSS)"
+                        style="max-width:100%; height:auto; border-radius:8px;">
+                    <p class="is-size-6 has-text-grey">Qualitative results (LP + LS) — reduced false positives vs naive
+                        quantization.</p>
+                </div>
+            </div>
+
+            <!-- System-Level -->
+            <h3 class="title is-4">System-Level (End-to-End)</h3>
+            <div class="content has-text-justified">
+                <p>
+                    Under realistic deployment (ROS + TensorRT), QuantV2X reduces latency across all stages:
+                    local inference, communication, and fusion; the overall end-to-end speedup is approximately 3.2×.
+                </p>
+            </div>
+
+            <!-- Latency figure -->
+            <div class="has-text-centered" style="margin:1rem 0 2rem;">
+                <img src="./static/latency.png" alt="System-Level Latency Breakdown"
+                    style="max-width:100%; height:auto; border-radius:8px;">
+                <p class="is-size-6 has-text-grey">
+                    Latency breakdown (ms) and component-wise speedups: 1.6× local, 5.3× communication, 2.5× fusion;
+                    total 3.2×.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="section-divider"></div>
+
+    <!-- ===== Videos ===== -->
+    <section id="videos" class="section">
+        <div class="container is-max-desktop">
+
+            <!-- Section title -->
+            <h2 class="title is-3 has-text-centered" style="margin-bottom:1.5rem;">
+                Videos
+            </h2>
+
+            <!-- Video -->
+            <div class="has-text-centered">
+                <video id="opv2v-teaser" autoplay muted loop playsinline preload="auto"
+                    style="max-width:100%; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+                    <source src="static/opv2v_h264.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <!-- Caption -->
+            <p class="subtitle has-text-centered" style="margin-top:0.75rem;">
+                Left: FP32 · Right: INT8 (weights & activations)
+            </p>
+
+        </div>
+    </section>
+
+
+
+    <!-- ===== Footer (minimal) ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered">
+                <div class="columns is-centered">
+                    <div class="column is-8">
+                        <div class="content">
+                            <p>Website template adapted from <a
+                                    href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
